@@ -56,8 +56,9 @@ export default function index() {
                     <Button>Create a Product</Button>
                 </Link>
             </div>
-            {products.length >> 0 && (
-                <div className="m-4">
+
+            <div className="m-4">
+                {products.length >> 0 && (
                     <Table>
                         <TableCaption>A list of your recent products.</TableCaption>
                         <TableHeader>
@@ -76,7 +77,10 @@ export default function index() {
                                     <TableCell>{product.name}</TableCell>
                                     <TableCell>{product.price}</TableCell>
                                     <TableCell>{product.description}</TableCell>
-                                    <TableCell className="text-center">
+                                    <TableCell className="space-x-2 text-center">
+                                        <Link href={route('products.edit', product.id)}>
+                                            <Button className="bg-slate-600 hover:bg-slate-700">Edit</Button>
+                                        </Link>
                                         <Button
                                             disabled={processing}
                                             onClick={() => handleDelete(product.id, product.name)}
@@ -89,8 +93,8 @@ export default function index() {
                             ))}
                         </TableBody>
                     </Table>
-                </div>
-            )}
+                )}
+            </div>
         </AppLayout>
     );
 }

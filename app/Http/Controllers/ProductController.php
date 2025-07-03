@@ -36,4 +36,21 @@ class ProductController extends Controller
         $product->delete();
         return redirect()->route('products.index')->with('success', 'Product deleted successfully.');
     }
+
+    public function edit(Product $product)
+    {
+        return Inertia::render('Products/Edit', compact('product'));
+    }
+
+    public function update(Request $request, Product $product)
+    {
+        $request->validate([
+            'name'=> 'required|string|max:255',
+            'price' => 'required|numeric|min:0',
+            'description' => 'nullable|string',
+        ]);
+
+        $product->update($request->all());
+        return redirect()->route('products.index')->with('success', 'Product updated successfully.');
+    }
 }

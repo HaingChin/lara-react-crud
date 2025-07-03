@@ -4,34 +4,38 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
 import { Head, useForm } from '@inertiajs/react';
 import { CircleAlert } from 'lucide-react';
+
 import React from 'react';
 
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Create a New Product',
-        href: '/products/create',
-    },
-];
+interface Product {
+    id: number;
+    name: string;
+    price: number;
+    description: string;
+}
 
-export default function index() {
-    const { data, setData, post, processing, errors } = useForm({
-        name: '',
-        price: '',
-        description: '',
+interface Props {
+    product: Product;
+}
+
+export default function Edit({ product }: Props) {
+    const { data, setData, put, processing, errors } = useForm({
+        name: product.name || '',
+        price: product.price || '',
+        description: product.description || '',
     });
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleUpdate = (e: React.FormEvent) => {
         e.preventDefault();
-        post(route('products.store'));
+        put(route('products.update', product.id));
     };
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Create a New Product" />
+        <AppLayout breadcrumbs={[{ title: 'Edit a Product', href: '/products/{product.id}/edit' }]}>
+            <Head title="Update a Product" />
             <div className="w-8/12 p-4">
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleUpdate} className="space-y-4">
                     {/* Display Error */}
 
                     {Object.keys(errors).length > 0 && (
@@ -64,7 +68,7 @@ export default function index() {
                         ></Textarea>
                     </div>
                     <Button disabled={processing} type="submit">
-                        Add Product
+                        Update Product
                     </Button>
                 </form>
             </div>
